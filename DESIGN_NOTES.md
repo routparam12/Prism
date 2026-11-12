@@ -94,3 +94,30 @@ Researched from live inspection of **sarvam.ai** and **anthropic.com/research/te
 - **Format:** Single high-res WebP sprite sheet (6 columns × 4 rows = 24 frames, transparent background, single-color mask).
 - **CSS Masking:** `mask-image` + `-webkit-mask-image`, `mask-size: 600% 400%`, `background-color: currentColor`.
 - **JS Controller:** Driven via `requestAnimationFrame` with cubic-bezier easing to frame indices, per-frame hold weights ("on twos" hand-drawn jitter feel), graceful completion on pointerleave, tap toggle on touch, keyboard focusable with visible focus ring, and `@media (prefers-reduced-motion: reduce)` override to static frame 0.
+
+---
+
+## 7. Cinematic Hero Light Stage (White Light → Glass Prism → Spectral Fan)
+
+### Research Findings from Anthropic (`anthropic.com/institute/econ-scenarios`)
+- **Translucent Multiply Layering:** Translucent SVG vector paths composited using `mix-blend-mode: multiply` against warm off-white background paper (`#FAF9F5`). Fills vary between `fill-opacity: 0.24` and `0.68` across muted botanical/mineral tones (`#A2B48B`, `rgb(137,157,112)`).
+- **Textural Noise & Filtering:** Subtle SVG filter marker texture (`#mk-marker`) and fine stippled grain prevent flat synthetic digital look and produce authentic watercolor/marker physical qualities.
+- **Editorial Restraint:** Absolute positioning (`inset: 0; width: 100%; height: 100%`) contained within charts using negative clip-path insets (`clip-path: inset(0 0 -128px)`), leaving generous breathing room for typography.
+
+### Light Theme Prototype Evaluation: (a) Pro Dark Inset vs. (b) Multiply on Cream
+Both rendering techniques were prototyped and visually evaluated:
+
+1. **Option (a) — Pro Dark Inset (Selected Default):**
+   - **Visual Execution:** The stage is presented as an obsidian optical theater inset (`border-radius: 20px`, radial obsidian gradient `#141417` to `#080809`, hairline border `rgba(255, 255, 255, 0.12)`, ambient shadow `0 24px 64px -12px rgba(0,0,0,0.5)`).
+   - **Optical Fidelity:** Preserves 100% of the luminous additive/screen physics of the visual target (Image 2): the narrow incoming white beam glows with a soft Tyndall halo, the glass prism produces bright internal focal highlights, and the 7 spectral hairline rays (Red `#ff3b30`, Orange `#ff9500`, Yellow `#ffd60a`, Green `#34c759`, Cyan `#32ade6`, Indigo `#5856d6`, Violet `#af52de`) disperse with radiant brilliance.
+   - **Contrast & Hierarchy:** Creates a high-craft focal contrast between the warm editorial cream page (`#FAF9F5`) and the pro optical stage, ensuring text above retains WCAG AAA contrast (> 12:1).
+
+2. **Option (b) — Multiply on Cream:**
+   - **Visual Execution:** Uses `mix-blend-mode: multiply` directly over the cream canvas with a warm off-white beam with subtle pencil/ink shadow and delicate ink-line glass prism strokes.
+   - **Trade-off:** While aesthetically pleasant in an illustration/print diagram sense, it inevitably diminishes the physical feeling of an emitting beam of light, as light cannot additively glow or shine brightly over a light cream substrate.
+
+3. **Implementation Decision:**
+   - Option (a) "Dark Inset" is the default presentation.
+   - An interactive mode switcher is embedded in the stage header (`Dark Inset` vs `Multiply Cream`), allowing live side-by-side demonstration of both techniques.
+   - In Dark Mode, both modes seamlessly converge into the full-bleed dark obsidian environment.
+

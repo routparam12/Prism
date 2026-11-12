@@ -7,12 +7,49 @@
 import { initNavigation } from './nav.js';
 import './sprite-icon.js';
 import { calculateTokenEconomics } from './motion-math.js';
+import { AnthropicLightStage } from './anthropic-stage.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize Navbar & Theme Controller
   initNavigation();
 
-  // 2. Slow Atmospheric Light-Refraction Parallax Drift (Compositor Only)
+  // 2. Initialize Anthropic-Style SVG Light Stage (Grid + mk-marker + Left-to-Right Beams)
+  const anthropicStageEl = document.getElementById('anthropicStage');
+  let anthropicStageInstance = null;
+
+  if (anthropicStageEl) {
+    const initStage = () => {
+      anthropicStageInstance = new AnthropicLightStage(anthropicStageEl, {
+        rayCount: 32,
+        speed: 1.0,
+        streaming: true,
+        onPulse: () => {
+          // Synchronized haptic & visual pulse
+        }
+      });
+    };
+
+    // First paint priority: initialize after initial paint via requestIdleCallback
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(initStage, { timeout: 120 });
+    } else {
+      setTimeout(initStage, 50);
+    }
+
+    // Scroll fade & subtle parallax (transform & opacity only)
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const stageWrapper = anthropicStageEl.closest('.anthropic-stage-wrapper');
+      if (stageWrapper && scrollY < 1200) {
+        const opacity = Math.max(0, 1 - scrollY / 650);
+        const translateY = (scrollY * 0.12).toFixed(1);
+        stageWrapper.style.opacity = opacity.toFixed(3);
+        stageWrapper.style.transform = `translate3d(0, ${translateY}px, 0)`;
+      }
+    }, { passive: true });
+  }
+
+  // 3. Slow Atmospheric Light-Refraction Parallax Drift (Compositor Only)
   const backdrop = document.querySelector('.refraction-backdrop');
   const heroSection = document.querySelector('.hero-section');
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');

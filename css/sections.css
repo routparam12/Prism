@@ -15,14 +15,14 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 8rem 1.5rem 6rem;
+  padding: clamp(4.5rem, 6.5vh, 5.5rem) 1.5rem 2rem;
   overflow: hidden;
   background-color: var(--bg-root);
 }
 
 @media (max-width: 640px) {
   .hero-section {
-    padding: 6.5rem 1rem 3.5rem;
+    padding: 4.5rem 1rem 2rem;
   }
 }
 
@@ -54,7 +54,6 @@
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-[data-theme="dark"] .refraction-backdrop,
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .refraction-backdrop {
     background: 
@@ -65,6 +64,16 @@
       radial-gradient(circle 40% at 72% 58%, rgba(244, 63, 94, 0.12) 0%, transparent 70%),
       linear-gradient(180deg, rgba(226, 125, 86, 0.08) 0%, transparent 100%);
   }
+}
+
+[data-theme="dark"] .refraction-backdrop {
+  background: 
+    radial-gradient(ellipse 45% 30% at 50% 46%, rgba(255, 255, 255, 0.05) 0%, transparent 70%),
+    radial-gradient(circle 35% at 30% 45%, rgba(139, 92, 246, 0.14) 0%, transparent 70%),
+    radial-gradient(circle 38% at 50% 38%, rgba(6, 182, 212, 0.12) 0%, transparent 70%),
+    radial-gradient(circle 42% at 68% 46%, rgba(226, 125, 86, 0.16) 0%, transparent 75%),
+    radial-gradient(circle 40% at 72% 58%, rgba(244, 63, 94, 0.12) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(226, 125, 86, 0.08) 0%, transparent 100%);
 }
 
 /* Subtle Film Grain Texture Overlay */
@@ -84,15 +93,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.hero-icon-container {
-  margin: 1.25rem 0 1rem;
+  width: 100%;
 }
 
 .hero-headline {
-  margin-top: 0.5rem;
-  margin-bottom: 1.25rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0.65rem;
+  font-size: clamp(2.1rem, 3.6vw, 3.4rem);
+  line-height: 1.12;
   font-weight: 500;
   letter-spacing: -0.03em;
   color: var(--text-primary);
@@ -100,12 +108,248 @@
 }
 
 .hero-subline {
-  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  font-size: clamp(0.95rem, 1.35vw, 1.15rem);
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.45;
   color: var(--text-secondary);
-  max-width: 620px;
+  max-width: 600px;
   margin: 0 auto;
+}
+
+/* -------------------------------------------------------------
+   Hero Light Stage (White Light -> Glass Prism -> Spectral Fan)
+   ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   Anthropic-Style SVG Light Stage (Econ-Scenarios Inspired)
+   Grid Background + Real mk-marker SVG Filter + Left-to-Right Streaming Beams
+   ------------------------------------------------------------- */
+.anthropic-stage-wrapper {
+  width: 100%;
+  max-width: 1120px;
+  margin: 1.5rem auto 0.75rem;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.anthropic-stage-container {
+  position: relative;
+  width: 100%;
+  min-height: 320px;
+  height: clamp(320px, 38vh, 420px);
+  aspect-ratio: 21 / 8;
+  border-radius: 20px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--duration-normal) var(--ease-smooth),
+              border-color var(--duration-normal) var(--ease-smooth),
+              box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+:root:not([data-theme="dark"]) .anthropic-stage-container {
+  background-color: #FAF9F5;
+  border: 1px solid rgba(20, 20, 19, 0.1);
+  box-shadow: 0 12px 36px -10px rgba(20, 20, 19, 0.06),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] .anthropic-stage-container {
+  background-color: #0E0E0D;
+  border: 1px solid rgba(250, 249, 245, 0.1);
+  box-shadow: 0 16px 48px -10px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(250, 249, 245, 0.08);
+}
+
+.anthropic-stage-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Grid lines (Anthropic Engineering Notebook Style) */
+.grid-path {
+  stroke: rgba(20, 20, 19, 0.11);
+}
+
+[data-theme="dark"] .grid-path {
+  stroke: rgba(250, 249, 245, 0.07);
+}
+
+/* Anthropic Marker Group with blend modes */
+.anthropic-marker-layer {
+  mix-blend-mode: multiply;
+  isolation: isolate;
+  will-change: transform;
+  transform-origin: 418px 205px;
+  transition: transform 0.15s ease-out;
+}
+
+[data-theme="dark"] .anthropic-marker-layer {
+  mix-blend-mode: screen;
+}
+
+/* Incoming Beam styling */
+.beam-shadow {
+  opacity: 0.15;
+}
+
+[data-theme="dark"] .beam-shadow {
+  opacity: 0;
+}
+
+.incoming-beam-strand {
+  will-change: stroke-dashoffset;
+}
+
+/* Prism wireframe elements */
+.prism-facet-front {
+  fill: rgba(230, 226, 218, 0.55);
+}
+
+[data-theme="dark"] .prism-facet-front {
+  fill: rgba(255, 255, 255, 0.06);
+}
+
+.prism-facet-side {
+  fill: rgba(20, 20, 19, 0.05);
+}
+
+[data-theme="dark"] .prism-facet-side {
+  fill: rgba(255, 255, 255, 0.03);
+}
+
+.prism-facet-base {
+  fill: rgba(20, 20, 19, 0.03);
+}
+
+[data-theme="dark"] .prism-facet-base {
+  fill: rgba(255, 255, 255, 0.02);
+}
+
+.prism-line {
+  stroke: rgba(20, 20, 19, 0.65);
+}
+
+[data-theme="dark"] .prism-line {
+  stroke: rgba(255, 255, 255, 0.85);
+}
+
+.internal-refract-beam {
+  stroke: #6B655D;
+}
+
+[data-theme="dark"] .internal-refract-beam {
+  stroke: #FFFFFF;
+}
+
+.bloom-spot {
+  fill: #6B655D;
+}
+
+[data-theme="dark"] .bloom-spot {
+  fill: #FFFFFF;
+}
+
+/* Spectral ray paths */
+.spectral-ray-path {
+  will-change: stroke-dashoffset;
+  transition: stroke 0.3s ease;
+}
+
+/* Interactive Hit Target over Prism Core */
+.anthropic-stage-hit {
+  position: absolute;
+  left: 16%;
+  top: 18%;
+  width: 17%;
+  height: 62%;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 16px;
+  outline: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.anthropic-stage-hit:focus-visible {
+  box-shadow: 0 0 0 2px var(--border-focus);
+}
+
+/* Badges & Live Status Indicators */
+.stage-editorial-badge {
+  position: absolute;
+  top: 0.85rem;
+  left: 1.15rem;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.stage-streaming-badge {
+  position: absolute;
+  top: 0.85rem;
+  right: 1.15rem;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  background: var(--bg-chip);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+  padding: 0.22rem 0.65rem;
+  pointer-events: none;
+}
+
+.streaming-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #34C759;
+  box-shadow: 0 0 6px #34C759;
+  animation: streamPulse 2s infinite ease-in-out;
+}
+
+@keyframes streamPulse {
+  0%, 100% { opacity: 0.45; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@media (max-width: 640px) {
+  .anthropic-stage-container {
+    min-height: 290px;
+    height: 310px;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+  }
+  .stage-editorial-badge {
+    display: none;
+  }
+  .stage-streaming-badge {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.65rem;
+  }
+  .anthropic-stage-hit {
+    left: 23%;
+    top: 18%;
+    width: 20%;
+    height: 64%;
+  }
 }
 
 /* -------------------------------------------------------------
