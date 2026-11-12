@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prism - Enterprise LLM Fine-Tuning</title>
+    <meta name="description" content="Production marketing website for Prism, fine-tuning open-weight LLMs on your data and deploying to your cloud." />
+    
+    <!-- OpenGraph & Social Cards -->
+    <meta property="og:title" content="Prism - Enterprise LLM Fine-Tuning" />
+    <meta property="og:description" content="Production marketing website for Prism, fine-tuning open-weight LLMs on your data and deploying to your cloud." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Favicon: Clean faceted Prism Mark -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,4 4,26 28,26' fill='none' stroke='%23D9653B' stroke-width='3' stroke-linejoin='round'/%3E%3Cline x1='16' y1='4' x2='16' y2='17' stroke='%23D9653B' stroke-width='2'/%3E%3Cline x1='4' y1='26' x2='16' y2='17' stroke='%23D9653B' stroke-width='2'/%3E%3Cline x1='28' y1='26' x2='16' y2='17' stroke='%23D9653B' stroke-width='2'/%3E%3C/svg%3E" />
+
+    <!-- Preload Critical Animated Sprite Sheet -->
+    <link rel="preload" href="/assets/sprites/prism-sprite.webp" as="image" type="image/webp" />
+
+    <!-- Modular Vanilla Stylesheets -->
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/sections.css" />
+  </head>
+  <body>
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- 1. Floating Pill Navbar (Matching Haven Layout Reference) -->
+    <header class="nav-header">
+      <nav class="floating-navbar" aria-label="Main navigation">
+        <a href="#hero" class="nav-brand" aria-label="Prism Home">
+          <div class="nav-brand-logo">
+            <prism-sprite-icon
+              icon-size="28px"
+              duration="900"
+              trigger="hover"
+              aria-label="Prism mark logo">
+            </prism-sprite-icon>
+          </div>
+          <span>Prism</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#hero" class="nav-link">Home</a></li>
+          <li><a href="#qualification" class="nav-link">Use Cases</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#delivery" class="nav-link">Delivery</a></li>
+          <li><a href="#pricing" class="nav-link">Pricing</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Light/Dark Mode Switcher -->
+          <button type="button" class="btn-theme-toggle" aria-label="Toggle dark/light theme">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <!-- Floating Pill Primary Action -->
+          <a href="#pricing" class="btn-nav-action">Login</a>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button type="button" class="btn-mobile-toggle" aria-label="Open mobile menu" aria-expanded="false">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+      <div class="mobile-drawer-sheet">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: 600; font-size: 1.1rem;">Menu</span>
+          <button type="button" class="btn-mobile-close" aria-label="Close menu" style="padding: 0.5rem; color: var(--text-secondary);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <ul class="mobile-nav-list">
+          <li class="mobile-nav-item"><a href="#hero">Home</a></li>
+          <li class="mobile-nav-item"><a href="#qualification">Use Cases</a></li>
+          <li class="mobile-nav-item"><a href="#how-it-works">How It Works</a></li>
+          <li class="mobile-nav-item"><a href="#delivery">Delivery</a></li>
+          <li class="mobile-nav-item"><a href="#pricing">Pricing</a></li>
+          <li class="mobile-nav-item"><a href="#faq">FAQ</a></li>
+        </ul>
+        <a href="#pricing" class="btn-pill-contrast" style="width: 100%; justify-content: center;">Start 3-Week Pilot</a>
+      </div>
+    </div>
+
+    <!-- Main Content Landmarks -->
+    <main id="main-content">
+      <!-- 1. Hero Section (Matching Haven Layout Reference) -->
+      <section id="hero" class="hero-section" aria-labelledby="hero-heading">
+        <!-- Atmospheric Light-Refraction Background -->
+        <div class="hero-atmosphere" aria-hidden="true">
+          <div class="refraction-backdrop"></div>
+        </div>
+
+        <div class="hero-content">
+          <!-- Announcement Pill Chip (Matching Haven) -->
+          <a href="#delivery" class="announcement-chip">
+            <span class="chip-spark"></span>
+            <span>Now fine-tuning Llama 3.3, Qwen 2.5 &amp; Mistral</span>
+          </a>
+
+          <!-- Centerpiece Animated Hand-Drawn Prism Icon -->
+          <div class="hero-icon-container">
+            <prism-sprite-icon
+              icon-size="140px"
+              duration="1150"
+              loop-on-hover="true"
+              trigger="both"
+              aria-label="Interactive hand-drawn Prism refraction mark. Hover, tap, or press enter to animate.">
+            </prism-sprite-icon>
+          </div>
+
+          <!-- Centered Display Headline -->
+          <h1 id="hero-heading" class="hero-headline">
+            Models that speak your business.
+          </h1>
+
+          <!-- Editorial Subline -->
+          <p class="hero-subline">
+            Fine-tuned on your data. Deployed in your cloud. Measured against your baseline.
+          </p>
+
+          <!-- Dual CTAs -->
+          <div class="hero-cta-group">
+            <a href="#pricing" class="btn-pill-primary">
+              Get Started <span class="arrow" aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="#demoModal" id="watchDemoBtn" class="btn-text-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="10 8 16 12 10 16 10 8"></polygon>
+              </svg>
+              Watch Demo
+            </a>
+          </div>
+        </div>
+
+        <!-- Anchored SCROLL ↓ Indicator -->
+        <a href="#qualification" class="scroll-indicator" aria-label="Scroll to Use Cases">
+          <span>SCROLL &darr;</span>
+        </a>
+      </section>
+
+      <!-- 2. When Fine-Tuning is the Right Tool (Sarvam-Style Editorial Cards) -->
+      <section id="qualification" class="section section-alt" aria-labelledby="qual-heading">
+        <div class="container">
+          <div class="section-header text-center">
+            <span class="label-mono">01 / Qualification Criteria</span>
+            <h2 id="qual-heading" class="section-title">When fine-tuning is the right tool.</h2>
+            <p class="section-desc">
+              Generalist foundation models are remarkably broad, but enterprise workflows demand deterministic outputs, strict privacy, and cost efficiency.
+            </p>
+          </div>
+
+          <div class="cards-grid-4">
+            <!-- Card 1 -->
+            <article class="editorial-card">
+              <div class="card-header-meta">
+                <div class="card-icon-box" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                    <line x1="9" y1="20" x2="15" y2="20"></line>
+                    <line x1="12" y1="4" x2="12" y2="20"></line>
+                  </svg>
+                </div>
+                <span class="label-counter">01</span>
+              </div>
+              <h3 class="card-title">A consistent output format or tone</h3>
+              <p class="card-desc">
+                Enforce strict JSON schema guarantees, domain taxonomy, or your exact brand voice without wasting hundreds of tokens on few-shot prompting.
+              </p>
+              <span class="card-tag">SCHEMA FIDELITY · 100% PARSEABLE</span>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="editorial-card">
+              <div class="card-header-meta">
+                <div class="card-icon-box" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                  </svg>
+                </div>
+                <span class="label-counter">02</span>
+              </div>
+              <h3 class="card-title">Domain-specific classification or extraction</h3>
+              <p class="card-desc">
+                Extract high-stakes entities from complex invoices, clinical notes, insurance claims, or legal contracts where generalist models miss nuances.
+              </p>
+              <span class="card-tag">SPECIALIZED LOGIC · TAXONOMY FIT</span>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="editorial-card">
+              <div class="card-header-meta">
+                <div class="card-icon-box" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+                <span class="label-counter">03</span>
+              </div>
+              <h3 class="card-title">Lower cost or latency with a small model</h3>
+              <p class="card-desc">
+                Distill 70B+ performance into a fine-tuned 8B or 14B model. Cut per-token inference costs by over 80% and achieve sub-100ms response times.
+              </p>
+              <span class="card-tag">8B COMPACTION · SUB-100MS TTFT</span>
+            </article>
+
+            <!-- Card 4 -->
+            <article class="editorial-card">
+              <div class="card-header-meta">
+                <div class="card-icon-box" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </div>
+                <span class="label-counter">04</span>
+              </div>
+              <h3 class="card-title">Data that can't leave your environment</h3>
+              <p class="card-desc">
+                For proprietary IP, sensitive customer records, or strictly regulated banking data, run weights inside your private cloud with zero egress.
+              </p>
+              <span class="card-tag">ZERO EGRESS · AIR-GAPPED READY</span>
+            </article>
+          </div>
+
+          <!-- Honest Benchmark Callout -->
+          <div class="qualification-note-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <p class="qualification-note-text">
+              <strong>Our engineering guarantee:</strong> Not sure if your problem needs fine-tuning? We benchmark prompt engineering and Retrieval-Augmented Generation (RAG) against your data first, and we will tell you upfront if you do not need fine-tuning.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. How It Works (5-Step Timeline) -->
+      <section id="how-it-works" class="section" aria-labelledby="process-heading">
+        <div class="container">
+          <div class="section-header">
+            <span class="label-mono">02 / Methodology</span>
+            <h2 id="process-heading" class="section-title">From raw data to sovereign weights in 3 weeks.</h2>
+            <p class="section-desc">
+              A transparent, engineering-led pipeline engineered to deliver measurable accuracy gains against your baseline.
+            </p>
+          </div>
+
+          <div class="timeline-container">
+            <!-- Step 1 -->
+            <div class="timeline-step-card">
+              <span class="step-number">PHASE 01</span>
+              <h3 class="step-title">Discovery</h3>
+              <p class="step-desc">
+                We define target metrics, quantify baseline accuracy, and run a feasibility audit on your domain task.
+              </p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="timeline-step-card">
+              <span class="step-number">PHASE 02</span>
+              <h3 class="step-title">Data Prep</h3>
+              <p class="step-desc">
+                Token sanitization, deduplication, synthetic negative generation, and structured instruction curation.
+              </p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="timeline-step-card">
+              <span class="step-number">PHASE 03</span>
+              <h3 class="step-title">Baseline Eval</h3>
+              <p class="step-desc">
+                Blind benchmark against frontier zero-shot models and human annotators before fine-tuning begins.
+              </p>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="timeline-step-card">
+              <span class="step-number">PHASE 04</span>
+              <h3 class="step-title">LoRA Training</h3>
+              <p class="step-desc">
+                Parameter-efficient fine-tuning (PEFT/LoRA) and full-rank adapter convergence on dedicated H100 clusters.
+              </p>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="timeline-step-card">
+              <span class="step-number">PHASE 05</span>
+              <h3 class="step-title">Eval &amp; Deploy</h3>
+              <p class="step-desc">
+                Statistical regression report, edge case auditing, and model weights delivery into your infrastructure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Interactive Benchmark Comparison -->
+      <section id="comparison" class="section section-alt" aria-labelledby="benchmark-heading">
+        <div class="container">
+          <div class="section-header">
+            <span class="label-mono">Live Comparison</span>
+            <h2 id="benchmark-heading" class="section-title">See the difference fine-tuning makes.</h2>
+            <p class="section-desc">
+              Compare output predictability, schema compliance, and formatting between a general foundation model and a Prism fine-tuned 8B model.
+            </p>
+          </div>
+
+          <div class="eval-widget">
+            <div class="eval-tabs" role="tablist" aria-label="Evaluation prompts">
+              <button type="button" class="eval-tab-btn is-active" role="tab" aria-selected="true" data-dataset="tax">
+                Tax &amp; Invoicing Extraction (GST)
+              </button>
+              <button type="button" class="eval-tab-btn" role="tab" aria-selected="false" data-dataset="legal">
+                Legal Contract Indemnity
+              </button>
+              <button type="button" class="eval-tab-btn" role="tab" aria-selected="false" data-dataset="support">
+                Multilingual Support (Hinglish)
+              </button>
+            </div>
+
+            <div style="padding: 1.25rem 1.5rem; background: var(--bg-muted); border-bottom: 1px solid var(--border-subtle);">
+              <span class="label-mono" style="font-size: 0.6875rem;">INPUT PROMPT</span>
+              <p id="evalPrompt" style="margin-top: 0.35rem; font-weight: 500; color: var(--text-primary); font-size: 0.9375rem;">
+                Extract GSTIN, invoice date, HSN items and tax breakup from this unformatted Indian purchase receipt text.
+              </p>
+            </div>
+
+            <div class="eval-content-grid">
+              <div class="eval-column">
+                <div class="eval-col-header">
+                  <span style="font-weight: 600; font-size: 0.9rem;">Generic Base Model (Prompted)</span>
+                  <span class="eval-badge base">70B · 820ms</span>
+                </div>
+                <div id="evalBaseOutput" class="eval-code">Certainly! Here is my best attempt at reading your invoice:
+
+Invoice Details:
+- The supplier GSTIN appears to be 29ABCDE1234F1Z5.
+- The invoice date was October 14, 2026.
+- HSN Code: 84713010 for Computer equipment.
+- CGST (9%): INR 4,500
+- SGST (9%): INR 4,500
+- Total Tax: INR 9,000
+
+Please note that you should double check with your auditor before filing in GSTR-2B. Let me know if you need any other tax help!</div>
+              </div>
+
+              <div class="eval-column">
+                <div class="eval-col-header">
+                  <span style="font-weight: 600; font-size: 0.9rem;">Prism Fine-Tuned Model</span>
+                  <span class="eval-badge prism">8B · 110ms · 100% Schema Valid</span>
+                </div>
+                <div id="evalPrismOutput" class="eval-code">{
+  "gstin_supplier": "29ABCDE1234F1Z5",
+  "invoice_date": "2026-10-14",
+  "hsn_summary": [
+    {
+      "code": "84713010",
+      "taxable_value": 50000.00,
+      "cgst_rate": 0.09,
+      "cgst_amt": 4500.00,
+      "sgst_rate": 0.09,
+      "sgst_amt": 4500.00,
+      "igst_amt": 0.00
+    }
+  ],
+  "total_invoice_val": 59000.00,
+  "schema_validated": true
+}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Delivery & Sovereignty Options -->
+      <section id="delivery" class="section" aria-labelledby="delivery-heading">
+        <div class="container">
+          <div class="section-header text-center">
+            <span class="label-mono">03 / Deployment &amp; Sovereignty</span>
+            <h2 id="delivery-heading" class="section-title">Built to run anywhere your business runs.</h2>
+            <p class="section-desc">
+              Your models, your architecture. Choose between fully managed endpoints, private VPC deployment, or complete weights handover.
+            </p>
+          </div>
+
+          <div class="delivery-grid">
+            <!-- Option 1 -->
+            <article class="editorial-card">
+              <span class="step-number">OPTION 01</span>
+              <h3 class="card-title">Hosted by Prism</h3>
+              <p class="card-desc">
+                Fully managed inference infrastructure with autoscaling, 99.9% uptime SLA, and sub-100ms latency. Models run with dedicated adapter isolation in secured tenant environments.
+              </p>
+              <ul style="list-style: none; margin-top: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.5rem;">
+                <li>&bull; Dedicated endpoints with API key authentication</li>
+                <li>&bull; High-throughput vLLM / TensorRT-LLM runtimes</li>
+                <li>&bull; Real-time latency &amp; drift monitoring</li>
+              </ul>
+            </article>
+
+            <!-- Option 2 -->
+            <article class="editorial-card">
+              <span class="step-number">OPTION 02</span>
+              <h3 class="card-title">In Your Cloud / VPC</h3>
+              <p class="card-desc">
+                We provide production-ready Terraform modules and Helm charts for AWS, GCP, or Azure. The model is deployed directly inside your private network boundary.
+              </p>
+              <ul style="list-style: none; margin-top: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.5rem;">
+                <li>&bull; Zero customer prompts or weights leave your VPC</li>
+                <li>&bull; Complies with your corporate IAM and firewall</li>
+                <li>&bull; Uses your existing cloud committed spend</li>
+              </ul>
+            </article>
+
+            <!-- Option 3 -->
+            <article class="editorial-card">
+              <span class="step-number">OPTION 03</span>
+              <h3 class="card-title">On-Prem or Weights Handover</h3>
+              <p class="card-desc">
+                Receive unencumbered weights in Safetensors, GGUF, or AWQ quantized formats. Run on your own GPU nodes, air-gapped clusters, or edge appliances.
+              </p>
+              <ul style="list-style: none; margin-top: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.5rem;">
+                <li>&bull; Full ownership of fine-tuned adapter weights</li>
+                <li>&bull; Air-gapped offline inference capability</li>
+                <li>&bull; No ongoing vendor lock-in or recurring per-call fees</li>
+              </ul>
+            </article>
+          </div>
+
+          <!-- Compliance & DPDP Assurance Band -->
+          <div class="compliance-band">
+            <div>
+              <h4 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text-primary);">
+                Data Sovereignty &amp; Privacy Commitment
+              </h4>
+              <p style="font-size: 0.875rem; color: var(--text-secondary); max-width: 650px;">
+                Strict data isolation under signed mutual agreements. Fully aligned with India's Digital Personal Data Protection (DPDP) Act. Your proprietary data is never used to train shared foundation models and is permanently deleted after validation.
+              </p>
+            </div>
+            <div class="compliance-tags">
+              <span class="compliance-tag">DPDP ACT COMPLIANT</span>
+              <span class="compliance-tag">ZERO DATA RETENTION</span>
+              <span class="compliance-tag">SINGLE-TENANT ENCLAVES</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Pricing & Interactive ROI Calculator -->
+      <section id="pricing" class="section section-alt" aria-labelledby="pricing-heading">
+        <div class="container">
+          <div class="section-header text-center">
+            <span class="label-mono">04 / Investment</span>
+            <h2 id="pricing-heading" class="section-title">Transparent pilot, predictable scaling.</h2>
+            <p class="section-desc">
+              Start with a fixed-scope 3-week pilot. Scale with flexible managed hosting or independent VPC deployment.
+            </p>
+          </div>
+
+          <div class="pricing-grid">
+            <!-- Pilot Plan -->
+            <div class="pricing-card is-featured">
+              <span class="pricing-badge">RECOMMENDED PILOT</span>
+              <span class="label-mono">FIXED SCOPE</span>
+              <h3 style="margin-top: 0.5rem; font-size: 1.35rem;">Fine-Tuning Pilot</h3>
+              <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                Complete end-to-end pilot on your business task with guaranteed benchmark validation.
+              </p>
+              <div class="pricing-price">
+                <!-- Clearly marked TODO placeholder as requested -->
+                TODO $4,900 <span>one-time fee</span>
+              </div>
+              <ul class="pricing-features">
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>Feasibility audit &amp; baseline benchmark</span>
+                </li>
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>Data preparation, cleaning &amp; tokenization</span>
+                </li>
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>1 Custom fine-tuned model (8B or 14B class)</span>
+                </li>
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>Comprehensive regression &amp; accuracy report</span>
+                </li>
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>Delivery of weights (Safetensors / GGUF)</span>
+                </li>
+              </ul>
+              <a href="#demoModal" class="btn-pill-contrast" style="text-align: center; justify-content: center; margin-top: auto;">
+                Schedule Pilot Consultation
+              </a>
+            </div>
+
+            <!-- Enterprise Hosting & Retraining -->
+            <div class="pricing-card">
+              <span class="label-mono">PRODUCTION SUPPORT</span>
+              <h3 style="margin-top: 0.5rem; font-size: 1.35rem;">Hosting &amp; Monitoring</h3>
+              <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                For enterprises running production inference with monthly retraining pipelines.
+              </p>
+              <div class="pricing-price">
+                <!-- Clearly marked TODO placeholder as requested -->
+                TODO $1,200 <span>/ month + compute</span>
+              </div>
+              <ul class="pricing-features">
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>Dedicated, autoscaling inference endpoint</span>
+                </li>
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>Continuous accuracy &amp; drift monitoring</span>
+                </li>
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>Quarterly or monthly model retraining</span>
+                </li>
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>99.9% Uptime SLA &amp; dedicated Slack support</span>
+                </li>
+                <li class="pricing-feature-item">
+                  <span class="pricing-check">&check;</span>
+                  <span>Optional VPC / on-prem telemetry sync</span>
+                </li>
+              </ul>
+              <a href="#demoModal" class="btn-pill-primary" style="text-align: center; justify-content: center; margin-top: auto;">
+                Contact Enterprise Sales
+              </a>
+            </div>
+          </div>
+
+          <!-- Interactive Token Economics ROI Calculator -->
+          <div class="roi-calculator">
+            <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 600;">
+              Estimate Your Token Economics vs. Frontier APIs
+            </h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+              Calculate the cost difference between commercial frontier API tokens (~$15.00/1M) and your own fine-tuned compact model (~$1.20/1M).
+            </p>
+
+            <div class="roi-slider-group">
+              <div class="roi-slider-header">
+                <span>Monthly Token Volume</span>
+                <span id="tokenValDisplay" style="font-family: var(--font-mono); color: var(--accent-brand); font-weight: 600;">50M tokens</span>
+              </div>
+              <input type="range" id="tokenSlider" class="roi-range" min="10" max="250" step="5" value="50" aria-label="Monthly Token Volume Slider" />
+            </div>
+
+            <div class="roi-metrics-grid">
+              <div>
+                <div class="roi-metric-val" id="monthlySavings">$690</div>
+                <div class="roi-metric-lbl">Monthly Savings</div>
+              </div>
+              <div>
+                <div class="roi-metric-val" id="annualSavings">$8,280</div>
+                <div class="roi-metric-lbl">Annual Savings</div>
+              </div>
+              <div>
+                <div class="roi-metric-val" id="percentSavings">92%</div>
+                <div class="roi-metric-lbl">Cost Reduction</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Accessible FAQ Accordions -->
+      <section id="faq" class="section" aria-labelledby="faq-heading">
+        <div class="container" style="max-width: 820px;">
+          <div class="section-header text-center">
+            <span class="label-mono">05 / Perspective</span>
+            <h2 id="faq-heading" class="section-title">Frequently asked questions.</h2>
+            <p class="section-desc">
+              Direct, transparent answers regarding data safety, fine-tuning methodologies, and model ownership.
+            </p>
+          </div>
+
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary class="faq-summary">
+                <span>How much training data do we actually need?</span>
+                <span class="faq-icon-cross" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-body">
+                For targeted extraction, classification, or style adherence, high-quality curated sets of 500 to 2,500 domain examples often yield superior results compared to noisy million-token crawls. In our Discovery phase, we audit your raw samples and generate verified synthetic augmentations if your labeled corpus is small.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-summary">
+                <span>How do you ensure our data is never leaked or used elsewhere?</span>
+                <span class="faq-icon-cross" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-body">
+                Every client engagement runs inside an ephemeral, single-tenant cloud environment with encrypted volume storage. We execute bilateral Non-Disclosure and Data Processing Agreements under India's Digital Personal Data Protection (DPDP) Act. Training datasets are permanently wiped once weights are handed over.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-summary">
+                <span>When should we choose RAG versus Fine-Tuning?</span>
+                <span class="faq-icon-cross" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-body">
+                RAG (Retrieval-Augmented Generation) is best for injecting dynamic factual knowledge, search queries, and recent documents. Fine-tuning is required when you need the model to learn a specific output syntax, complex categorization, specialized tone, or internalize domain reasoning patterns. The highest performing enterprise systems pair fine-tuned compact models with targeted RAG pipelines.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-summary">
+                <span>Which open-weight base models do you fine-tune?</span>
+                <span class="faq-icon-cross" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-body">
+                We primarily fine-tune Meta Llama (Llama 3.1 &amp; 3.3 8B/70B), Qwen (Qwen 2.5 7B/14B/32B), Mistral/Mixtral, and Gemma 2. Depending on your latency constraints and target language, we benchmark multiple candidate models before selecting the production foundation.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-summary">
+                <span>Who owns the final fine-tuned model weights?</span>
+                <span class="faq-icon-cross" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-body">
+                You do. You retain 100% intellectual property ownership of the resulting adapter weights and checkpoint artifacts. You are free to run them on our hosted servers, take them into your private cloud, or host them on your own air-gapped on-premise hardware.
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Final CTA Band -->
+      <section class="section" style="padding-top: 0;">
+        <div class="container">
+          <div class="cta-banner">
+            <h2>Ready to own your model instead of renting an API?</h2>
+            <p>
+              Schedule a 30-minute discovery call with our fine-tuning engineers. We will review your data, discuss feasibility, and prepare an evaluation roadmap.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+              <a href="#pricing" class="btn-pill-primary" style="background: #FFFFFF; color: #141413;">
+                Start 3-Week Pilot &rarr;
+              </a>
+              <a href="#demoModal" class="btn-pill-primary" style="background: rgba(255,255,255,0.12); color: #FFFFFF; border-color: rgba(255,255,255,0.2);">
+                Watch 3-Min Walkthrough
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 9. Footer with Static Prism Mark -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand-col">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <!-- Static Prism Mark for Footer -->
+              <prism-sprite-icon
+                icon-size="32px"
+                trigger="none"
+                aria-label="Prism static logo mark">
+              </prism-sprite-icon>
+              <span style="font-weight: 600; font-size: 1.15rem; color: var(--text-primary);">Prism</span>
+            </div>
+            <p class="footer-desc">
+              Enterprise LLM fine-tuning service. We adapt open-weight foundation models to your enterprise data and deliver them into your cloud.
+            </p>
+            <span class="compliance-tag" style="margin-top: 0.5rem;">
+              DPDP ACT COMPLIANT &middot; ZERO EGRESS
+            </span>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Platform</h4>
+            <ul class="footer-links">
+              <li><a href="#qualification">Use Cases</a></li>
+              <li><a href="#how-it-works">Methodology</a></li>
+              <li><a href="#delivery">Deployment Options</a></li>
+              <li><a href="#comparison">Benchmark Demos</a></li>
+              <li><a href="#pricing">Pricing &amp; Pilot</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Technology</h4>
+            <ul class="footer-links">
+              <li><a href="#delivery">VPC Terraform</a></li>
+              <li><a href="#delivery">LoRA Adapters</a></li>
+              <li><a href="#delivery">vLLM Inference</a></li>
+              <li><a href="#faq">Supported Models</a></li>
+              <li><a href="#qualification">Prompt Benchmark</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Company</h4>
+            <ul class="footer-links">
+              <li><a href="#hero">About Prism</a></li>
+              <li><a href="#faq">Data Security</a></li>
+              <li><a href="#hero">Careers</a></li>
+              <li><a href="#pricing">Contact Engineering</a></li>
+              <li><a href="#faq">Trust Center</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div>&copy; 2026 Prism Technologies. All rights reserved. Registered under Indian DPDP Act.</div>
+          <div style="display: flex; gap: 1.25rem;">
+            <a href="#faq">Privacy Policy</a>
+            <a href="#faq">Terms of Service</a>
+            <a href="#faq">Security Whitepaper</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Accessible Watch Demo Dialog Modal -->
+    <dialog id="demoModal" style="max-width: 600px; width: 90%; border: 1px solid var(--border-default); border-radius: var(--radius-card); background: var(--bg-surface); color: var(--text-primary); padding: 2rem; margin: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.3);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+        <div>
+          <span class="label-mono">Prism Walkthrough</span>
+          <h3 style="margin-top: 0.25rem;">Fine-Tuning Architecture Demo</h3>
+        </div>
+        <button type="button" id="demoCloseBtn" aria-label="Close modal" style="padding: 0.25rem; color: var(--text-secondary);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">
+        See how a proprietary 8B model fine-tuned on our pipeline processes complex tabular tax invoices and legal contracts in under 120ms with 100% JSON schema validation.
+      </p>
+      <div style="aspect-ratio: 16/9; background: var(--bg-muted); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1.5rem; text-align: center; padding: 1rem;">
+        <prism-sprite-icon icon-size="64px" trigger="hover" aria-label="Demo icon"></prism-sprite-icon>
+        <p style="font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem;">
+          3-Minute Technical Architecture Walkthrough
+        </p>
+      </div>
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+        <button type="button" onclick="document.getElementById('demoModal').close()" class="btn-text-secondary">
+          Close
+        </button>
+        <a href="#pricing" onclick="document.getElementById('demoModal').close()" class="btn-pill-primary">
+          Schedule Engineering Call &rarr;
+        </a>
+      </div>
+    </dialog>
+
+    <!-- Main JavaScript Modules -->
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>

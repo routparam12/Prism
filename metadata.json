@@ -1,0 +1,6 @@
+{
+  "name": "Prism - Enterprise LLM Fine-Tuning",
+  "description": "Production marketing website for Prism, fine-tuning open-weight LLMs on your data and deploying to your cloud.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
