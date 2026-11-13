@@ -54,6 +54,29 @@ export function calculateFrameIndex(progress, totalFrames = 24, holdWeights = nu
 }
 
 /**
+ * Computes the next frame index for seamless continuous sprite-sheet loops (e.g. 18x17 = 306 frames).
+ * @param {number} elapsedMs - Elapsed time in milliseconds
+ * @param {number} durationMs - Full cycle duration in milliseconds
+ * @param {number} totalFrames - Total frames in the sprite grid
+ * @param {'linear'|'cubic'} [easing='linear'] - Easing mode
+ * @param {number[]|null} [holdWeights=null] - Optional per-frame hold weights
+ * @returns {number}
+ */
+export function calculateLoopFrameIndex(
+  elapsedMs,
+  durationMs = 5100,
+  totalFrames = 306,
+  easing = 'linear',
+  holdWeights = null
+) {
+  if (totalFrames <= 1 || durationMs <= 0) return 0;
+  const wrapped = ((elapsedMs % durationMs) + durationMs) % durationMs;
+  const rawProgress = wrapped / durationMs;
+  const progress = easing === 'cubic' ? cubicEaseInOut(rawProgress) : rawProgress;
+  return calculateFrameIndex(progress, totalFrames, holdWeights);
+}
+
+/**
  * Calculates CSS percentage coordinates for mask-position given a frame index in a grid.
  * In CSS mask-position, 0% is the first frame, and 100% is the last frame in that axis.
  * Formula for N columns: percentage = (col / (cols - 1)) * 100%

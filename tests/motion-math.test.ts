@@ -4,6 +4,7 @@ import {
   cubicEaseInOut,
   smoothstep,
   calculateFrameIndex,
+  calculateLoopFrameIndex,
   calculateMaskPosition,
   calculateTokenEconomics
 } from '../js/motion-math.js';
@@ -44,6 +45,13 @@ test('calculateFrameIndex respects hold weights for key poses', () => {
   assert.equal(calculateFrameIndex(0.6, 4, weights), 1);
 });
 
+test('calculateLoopFrameIndex wraps cleanly for 306-frame 18x17 sprites', () => {
+  assert.equal(calculateLoopFrameIndex(0, 5100, 306, 'linear'), 0);
+  assert.equal(calculateLoopFrameIndex(2550, 5100, 306, 'linear'), 153);
+  assert.equal(calculateLoopFrameIndex(5100, 5100, 306, 'linear'), 0);
+  assert.equal(calculateLoopFrameIndex(7650, 5100, 306, 'linear'), 153);
+});
+
 test('calculateMaskPosition coordinates for 6x4 sprite sheet', () => {
   // Frame 0: top-left (col 0, row 0) -> (0%, 0%)
   const f0 = calculateMaskPosition(0, 6, 4);
@@ -63,6 +71,22 @@ test('calculateMaskPosition coordinates for 6x4 sprite sheet', () => {
   // Frame 23: bottom-right (col 5, row 3) -> (100%, 100%)
   const f23 = calculateMaskPosition(23, 6, 4);
   assert.deepEqual(f23, { xPercent: 100, yPercent: 100, col: 5, row: 3 });
+});
+
+test('calculateMaskPosition coordinates for 18x17 306-frame sprite sheet', () => {
+  const f0 = calculateMaskPosition(0, 18, 17);
+  assert.deepEqual(f0, { xPercent: 0, yPercent: 0, col: 0, row: 0 });
+
+  const f17 = calculateMaskPosition(17, 18, 17);
+  assert.deepEqual(f17, { xPercent: 100, yPercent: 0, col: 17, row: 0 });
+
+  const f18 = calculateMaskPosition(18, 18, 17);
+  assert.equal(f18.col, 0);
+  assert.equal(f18.row, 1);
+  assert.equal(f18.yPercent, 6.25);
+
+  const f305 = calculateMaskPosition(305, 18, 17);
+  assert.deepEqual(f305, { xPercent: 100, yPercent: 100, col: 17, row: 16 });
 });
 
 test('calculateTokenEconomics calculates accurate enterprise savings', () => {

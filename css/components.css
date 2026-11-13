@@ -125,10 +125,22 @@
   transition: all var(--duration-fast) var(--ease-smooth);
 }
 
+.btn-theme-toggle svg {
+  transition: transform 0.45s var(--ease-snappy);
+}
+
 .btn-theme-toggle:hover {
   color: var(--text-primary);
   background: var(--bg-muted);
   border-color: var(--border-subtle);
+}
+
+.btn-theme-toggle:hover svg {
+  transform: rotate(22deg) scale(1.08);
+}
+
+.btn-theme-toggle:active svg {
+  transform: rotate(90deg) scale(0.92);
 }
 
 /* Nav Action Pill Button */
@@ -303,6 +315,239 @@
 
 .prism-sprite-mask.is-animating {
   will-change: mask-position, -webkit-mask-position;
+}
+
+/* -------------------------------------------------------------
+   2b. Bespoke Animated SVG Icons (<prism-animated-icon>) & Utility Icon Motion
+   ------------------------------------------------------------- */
+.prism-anim-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--anim-icon-size, 24px);
+  height: var(--anim-icon-size, 24px);
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.prism-anim-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@keyframes prism-orbit-cw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes prism-orbit-ccw {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes prism-core-pulse {
+  0%, 100% { transform: scale(0.92); opacity: 0.78; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+
+@keyframes prism-dash-crawl {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -28; }
+}
+
+@keyframes prism-ring-breathe {
+  0%, 100% { transform: scale(0.94); opacity: 0.65; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes prism-shackle-breathe {
+  0%, 70%, 100% { transform: translateY(0); }
+  85% { transform: translateY(-1.6px); }
+}
+
+@keyframes prism-needle-sweep {
+  0%, 100% { transform: rotate(-18deg); }
+  50% { transform: rotate(16deg); }
+}
+
+@keyframes prism-bar-pulse {
+  0%, 100% { transform: scaleY(0.7); }
+  50% { transform: scaleY(1.12); }
+}
+
+@keyframes prism-float-up {
+  0%, 100% { transform: translateY(1.5px); opacity: 0.75; }
+  50% { transform: translateY(-2px); opacity: 1; }
+}
+
+@keyframes prism-float-gentle {
+  0%, 100% { transform: translateY(1px); }
+  50% { transform: translateY(-1.5px); }
+}
+
+.anim-orbit-slow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: prism-orbit-cw 14s linear infinite;
+}
+
+.anim-orbit-rev {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: prism-orbit-ccw 10s linear infinite;
+}
+
+.anim-core-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: prism-core-pulse 2.6s ease-in-out infinite;
+}
+
+.anim-dash-crawl {
+  animation: prism-dash-crawl 3.2s linear infinite;
+}
+
+.anim-ring-breathe {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: prism-ring-breathe 3s ease-in-out infinite;
+}
+
+.anim-shackle-breathe {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: prism-shackle-breathe 3.8s ease-in-out infinite;
+}
+
+.anim-needle-sweep {
+  transform-box: view-box;
+  transform-origin: 16px 19px;
+  animation: prism-needle-sweep 3.4s ease-in-out infinite;
+}
+
+.anim-bar-1, .anim-bar-2, .anim-bar-3 {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: prism-bar-pulse 2.4s ease-in-out infinite;
+}
+.anim-bar-2 { animation-delay: 0.35s; }
+.anim-bar-3 { animation-delay: 0.7s; }
+
+.anim-float-up {
+  animation: prism-float-up 2.4s ease-in-out infinite;
+}
+
+.anim-float-gentle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: prism-float-gentle 3.2s ease-in-out infinite;
+}
+
+.anim-inward-ticks {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: prism-ring-breathe 2.6s ease-in-out infinite reverse;
+}
+
+/* Keep SVG icon micro-animations paused at rest; play strictly on hover or focus */
+.prism-anim-icon svg * {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) {
+  .editorial-card:hover .prism-anim-icon svg *,
+  .timeline-step-card:hover .prism-anim-icon svg *,
+  .pricing-card:hover .prism-anim-icon svg *,
+  .qualification-note-box:hover .prism-anim-icon svg *,
+  .demo-preview-box:hover .prism-anim-icon svg *,
+  .prism-anim-icon:hover svg * {
+    animation-play-state: running;
+  }
+  .editorial-card:hover .anim-orbit-slow { animation-duration: 6s; }
+  .editorial-card:hover .anim-orbit-rev { animation-duration: 4.5s; }
+  .editorial-card:hover .anim-dash-crawl { animation-duration: 1.6s; }
+  .timeline-step-card:hover .prism-anim-icon { transform: scale(1.08); transition: transform 0.25s var(--ease-snappy); }
+}
+
+.editorial-card:focus-within .prism-anim-icon svg *,
+.timeline-step-card:focus-within .prism-anim-icon svg *,
+.pricing-card:focus-within .prism-anim-icon svg *,
+.qualification-note-box:focus-within .prism-anim-icon svg *,
+.demo-preview-box:focus-within .prism-anim-icon svg *,
+.prism-anim-icon:focus-visible svg * {
+  animation-play-state: running;
+}
+
+/* Watch Demo Play Ring Animation (hover / focus only) */
+.anim-play-icon .play-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: prism-orbit-cw 6s linear infinite;
+  animation-play-state: paused;
+}
+
+.anim-play-icon .play-tri {
+  transition: transform 0.25s var(--ease-snappy);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (hover: hover) {
+  .btn-text-secondary:hover .anim-play-icon .play-ring,
+  .btn-text-secondary:focus-visible .anim-play-icon .play-ring {
+    animation-play-state: running;
+    stroke: var(--accent-brand);
+  }
+  .btn-text-secondary:hover .anim-play-icon .play-tri,
+  .btn-text-secondary:focus-visible .anim-play-icon .play-tri {
+    transform: translateX(1.2px) scale(1.12);
+  }
+}
+
+/* Mobile hamburger subtle stagger */
+.btn-mobile-toggle svg line {
+  transition: transform 0.25s var(--ease-snappy), opacity 0.2s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.btn-mobile-toggle:hover svg line:nth-child(1) { transform: translateX(2px); }
+.btn-mobile-toggle:hover svg line:nth-child(3) { transform: translateX(-2px); }
+
+/* Timeline & Delivery animated icon headers */
+.timeline-step-head,
+.delivery-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.timeline-step-head .step-number,
+.delivery-card-head .step-number {
+  margin-bottom: 0;
+}
+
+.timeline-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-subtle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-brand);
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prism-anim-icon *,
+  .anim-play-icon .play-ring {
+    animation: none !important;
+  }
 }
 
 /* -------------------------------------------------------------
@@ -492,9 +737,14 @@
 @media (hover: hover) {
   .editorial-card:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-card-hover);
-    border-color: var(--border-strong);
+    box-shadow: var(--shadow-card-neon);
+    border-color: var(--border-card-neon);
   }
+}
+
+.editorial-card:focus-within {
+  box-shadow: var(--shadow-card-neon);
+  border-color: var(--border-card-neon);
 }
 
 .card-header-meta {
@@ -514,6 +764,10 @@
   align-items: center;
   justify-content: center;
   color: var(--accent-brand);
+}
+
+.card-icon-box .prism-sprite-wrapper {
+  color: inherit;
 }
 
 .card-title {
@@ -559,8 +813,14 @@
 @media (hover: hover) {
   .timeline-step-card:hover {
     transform: translateY(-3px);
-    border-color: var(--accent-brand);
+    border-color: var(--border-card-neon);
+    box-shadow: var(--shadow-card-neon);
   }
+}
+
+.timeline-step-card:focus-within {
+  border-color: var(--border-card-neon);
+  box-shadow: var(--shadow-card-neon);
 }
 
 .step-number {
@@ -605,11 +865,29 @@
   flex-direction: column;
   position: relative;
   box-shadow: var(--shadow-card);
+  transition: transform var(--duration-normal) var(--ease-snappy),
+              box-shadow var(--duration-normal) var(--ease-smooth),
+              border-color var(--duration-normal) var(--ease-smooth);
 }
 
 .pricing-card.is-featured {
   border-color: var(--accent-brand);
   box-shadow: 0 12px 36px rgba(217, 101, 59, 0.12);
+}
+
+@media (hover: hover) {
+  .pricing-card:hover,
+  .pricing-card.is-featured:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-card-neon);
+    box-shadow: var(--shadow-card-neon);
+  }
+}
+
+.pricing-card:focus-within,
+.pricing-card.is-featured:focus-within {
+  border-color: var(--border-card-neon);
+  box-shadow: var(--shadow-card-neon);
 }
 
 .pricing-badge {
@@ -662,6 +940,19 @@
   color: var(--accent-brand);
   flex-shrink: 0;
   margin-top: 0.15rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pricing-check svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.25s var(--ease-snappy);
+}
+
+.pricing-card:hover .pricing-check svg {
+  transform: scale(1.15);
 }
 
 /* Calculator Widget */
@@ -671,6 +962,17 @@
   border-radius: var(--radius-card);
   padding: 1.75rem;
   margin-top: 2rem;
+  transition: transform var(--duration-normal) var(--ease-snappy),
+              box-shadow var(--duration-normal) var(--ease-smooth),
+              border-color var(--duration-normal) var(--ease-smooth);
+}
+
+@media (hover: hover) {
+  .roi-calculator:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-card-neon);
+    box-shadow: var(--shadow-card-neon);
+  }
 }
 
 .roi-slider-group {
@@ -725,6 +1027,17 @@
   overflow: hidden;
   box-shadow: var(--shadow-card);
   margin-top: 2rem;
+  transition: transform var(--duration-normal) var(--ease-snappy),
+              box-shadow var(--duration-normal) var(--ease-smooth),
+              border-color var(--duration-normal) var(--ease-smooth);
+}
+
+@media (hover: hover) {
+  .eval-widget:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-card-neon);
+    box-shadow: var(--shadow-card-neon);
+  }
 }
 
 .eval-tabs {
@@ -821,7 +1134,17 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-card);
-  transition: border-color var(--duration-fast) var(--ease-smooth);
+  transition: transform var(--duration-normal) var(--ease-snappy),
+              box-shadow var(--duration-normal) var(--ease-smooth),
+              border-color var(--duration-fast) var(--ease-smooth);
+}
+
+@media (hover: hover) {
+  .faq-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-card-neon);
+    box-shadow: var(--shadow-card-neon);
+  }
 }
 
 .faq-item[open] {
@@ -861,4 +1184,22 @@
   color: var(--text-secondary);
   font-size: 0.9375rem;
   line-height: 1.65;
+}
+
+.demo-preview-box {
+  transition: transform var(--duration-normal) var(--ease-snappy),
+              box-shadow var(--duration-normal) var(--ease-smooth),
+              border-color var(--duration-normal) var(--ease-smooth);
+}
+
+@media (hover: hover) {
+  .demo-preview-box:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-card-neon) !important;
+    box-shadow: var(--shadow-card-neon);
+  }
+}
+
+dialog:focus {
+  outline: none;
 }

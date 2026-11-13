@@ -2,44 +2,68 @@
  * Prism Sprite Icon Component
  * Custom Web Component <prism-sprite-icon> and JavaScript class SpriteIcon.
  * Uses high-performance CSS masking (mask-image + -webkit-mask-image) and
- * requestAnimationFrame easing to animate a hand-drawn sprite sheet at 60fps.
+ * requestAnimationFrame easing to animate sprite sheets at 60fps.
+ *
+ * Supports:
+ * - 6x4 (24-frame) bespoke Prism mark with handcrafted "on twos" holdWeights
+ * - 18x17 (306-frame) Claude/Anthropic organic morphing sprite sheets
+ * - trigger: 'hover' | 'tap' | 'both' | 'ambient' | 'none'
+ * - easing: 'cubic' | 'linear'
  */
 
 import {
   cubicEaseInOut,
   calculateFrameIndex,
+  calculateLoopFrameIndex,
   calculateMaskPosition
 } from './motion-math.js';
+
+const DEFAULT_PRISM_HOLD_WEIGHTS = [
+  2.5, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1.8, 1.8,
+  1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1.5, 2.0
+];
 
 export class SpriteIcon {
   constructor(element, options = {}) {
     this.el = element;
+    const frameCount = Number(options.frameCount) || 24;
+    const easing = options.easing || (frameCount > 60 ? 'linear' : 'cubic');
+
     this.options = {
       spriteSheetUrl: options.spriteSheetUrl || '/assets/sprites/prism-sprite.webp',
-      frameCount: Number(options.frameCount) || 24,
+      frameCount,
       columns: Number(options.columns) || 6,
       rows: Number(options.rows) || 4,
-      duration: Number(options.duration) || 1100, // ms
+      duration: Number(options.duration) || (frameCount > 60 ? 5200 : 1100),
+      easing,
       loopOnHover: Boolean(options.loopOnHover),
       iconColor: options.iconColor || 'currentColor',
       iconSize: options.iconSize || '120px',
-      trigger: options.trigger || 'both', // 'hover' | 'tap' | 'both' | 'none'
+      trigger: options.trigger || 'both', // 'hover' | 'tap' | 'both' | 'ambient' | 'none'
       ariaLabel: options.ariaLabel || 'Prism icon mark',
-      holdWeights: options.holdWeights || [
-        2.5, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1.8, 1.8,
-        1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1.5, 2.0
-      ], // handcrafted "on twos" pacing with settled resting frames
+      startFrame: Number(options.startFrame) || 0,
+      holdWeights:
+        options.holdWeights !== undefined
+          ? options.holdWeights
+          : frameCount === 24
+            ? DEFAULT_PRISM_HOLD_WEIGHTS
+            : null,
       ...options
     };
 
-    this.currentFrame = 0;
+    this.currentFrame = this.options.startFrame % this.options.frameCount;
     this.isPlaying = false;
     this.isHovered = false;
     this.isPendingStop = false;
+    this.isVisible = true;
     this.startTime = null;
+    this.ambientElapsed = (this.currentFrame / this.options.frameCount) * this.options.duration;
+    this.lastTimestamp = null;
     this.rafId = null;
+    this.observer = null;
+    this.parentCard = null;
 
     // Media query for reduced motion
     this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -47,20 +71,28 @@ export class SpriteIcon {
     this.initDOM();
     this.bindEvents();
     this.preloadSprite();
+
+    if (this.options.trigger === 'ambient') {
+      this.startAmbientObserver();
+    }
   }
 
   initDOM() {
     this.el.classList.add('prism-sprite-wrapper');
-    this.el.setAttribute('role', 'img');
-    this.el.setAttribute('aria-label', this.options.ariaLabel);
+    this.el.setAttribute('data-animating', 'false');
+    const isDecorative = Boolean(this.el.closest('[aria-hidden="true"]'));
 
-    if (this.options.trigger !== 'none') {
-      if (!this.el.hasAttribute('tabindex')) {
-        this.el.setAttribute('tabindex', '0');
+    if (!isDecorative) {
+      this.el.setAttribute('role', 'img');
+      this.el.setAttribute('aria-label', this.options.ariaLabel);
+      if (this.options.trigger !== 'none' && this.options.trigger !== 'ambient') {
+        if (!this.el.hasAttribute('tabindex')) {
+          this.el.setAttribute('tabindex', '0');
+        }
       }
     }
 
-    // Shadow inner mask element to avoid layout thrashing
+    // Inner mask element to avoid layout thrashing
     let inner = this.el.querySelector('.prism-sprite-mask');
     if (!inner) {
       inner = document.createElement('div');
@@ -69,14 +101,13 @@ export class SpriteIcon {
     }
     this.maskEl = inner;
 
-    // Apply base CSS variables and initial frame position
     this.updateStyles();
-    this.setFrame(0);
+    this.setFrame(this.currentFrame);
   }
 
   updateStyles() {
     const { columns, rows, iconColor, iconSize, spriteSheetUrl } = this.options;
-    
+
     this.el.style.setProperty('--prism-icon-size', iconSize);
     this.el.style.setProperty('--prism-icon-color', iconColor);
     this.el.style.setProperty('--prism-cols', columns);
@@ -107,9 +138,88 @@ export class SpriteIcon {
     this.maskEl.style.setProperty('--frame-y', `${yPercent}%`);
   }
 
+  startAmbientObserver() {
+    if (this.prefersReducedMotion.matches) {
+      this.setFrame(this.options.startFrame % this.options.frameCount);
+      return;
+    }
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            this.isVisible = entry.isIntersecting;
+            if (this.isVisible && !this.isPlaying && !this.prefersReducedMotion.matches) {
+              this.playAmbient();
+            } else if (!this.isVisible && this.isPlaying) {
+              this.pauseAmbient();
+            }
+          });
+        },
+        { threshold: 0.05 }
+      );
+      this.observer.observe(this.el);
+    } else {
+      this.playAmbient();
+    }
+  }
+
+  playAmbient() {
+    if (this.prefersReducedMotion.matches || this.isPlaying) return;
+
+    this.isPlaying = true;
+    this.el.setAttribute('data-animating', 'true');
+    this.lastTimestamp = performance.now();
+    this.maskEl.classList.add('is-animating');
+
+    const stepAmbient = (timestamp) => {
+      if (!this.isPlaying) return;
+      if (document.visibilityState === 'hidden' || !this.isVisible) {
+        this.pauseAmbient();
+        return;
+      }
+
+      const dt = Math.min(80, Math.max(0, timestamp - this.lastTimestamp));
+      this.lastTimestamp = timestamp;
+
+      // Gently accelerate on hover for tactile feedback
+      const speedMultiplier = this.isHovered ? 1.85 : 1.0;
+      this.ambientElapsed += dt * speedMultiplier;
+
+      const frame = calculateLoopFrameIndex(
+        this.ambientElapsed,
+        this.options.duration,
+        this.options.frameCount,
+        this.options.easing,
+        this.options.holdWeights
+      );
+      if (frame !== this.currentFrame) {
+        this.setFrame(frame);
+      }
+
+      this.rafId = requestAnimationFrame(stepAmbient);
+    };
+
+    this.rafId = requestAnimationFrame(stepAmbient);
+  }
+
+  pauseAmbient() {
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+    this.isPlaying = false;
+    this.el.setAttribute('data-animating', 'false');
+    this.maskEl.classList.remove('is-animating');
+  }
+
   play() {
     if (this.prefersReducedMotion.matches) {
-      // With reduced motion, do not play rapid frame flips
+      return;
+    }
+
+    if (this.options.trigger === 'ambient') {
+      this.playAmbient();
       return;
     }
 
@@ -118,6 +228,7 @@ export class SpriteIcon {
     this.isPlaying = true;
     this.isPendingStop = false;
     this.startTime = performance.now();
+    this.el.setAttribute('data-animating', 'true');
     this.maskEl.classList.add('is-animating');
 
     this.el.dispatchEvent(new CustomEvent('prism:start', {
@@ -129,30 +240,41 @@ export class SpriteIcon {
       if (!this.isPlaying) return;
 
       const elapsed = timestamp - this.startTime;
+
+      if (this.options.loopOnHover && this.isHovered && !this.isPendingStop) {
+        const frame = calculateLoopFrameIndex(
+          elapsed,
+          this.options.duration,
+          this.options.frameCount,
+          this.options.easing,
+          this.options.holdWeights
+        );
+        if (frame !== this.currentFrame) {
+          this.setFrame(frame);
+        }
+        this.rafId = requestAnimationFrame(step);
+        return;
+      }
+
       const rawProgress = elapsed / this.options.duration;
 
-      if (rawProgress < 1) {
-        const eased = cubicEaseInOut(rawProgress);
-        const frame = calculateFrameIndex(eased, this.options.frameCount, this.options.holdWeights);
-        this.setFrame(frame);
+      if (rawProgress < 1 && !(this.isPendingStop && (this.options.loopOnHover || this.options.frameCount > 60))) {
+        const progress = this.options.easing === 'cubic' ? cubicEaseInOut(rawProgress) : rawProgress;
+        const frame = calculateFrameIndex(progress, this.options.frameCount, this.options.holdWeights);
+        if (frame !== this.currentFrame) {
+          this.setFrame(frame);
+        }
         this.rafId = requestAnimationFrame(step);
       } else {
-        // One full cycle completed
-        if (this.options.loopOnHover && this.isHovered && !this.isPendingStop) {
-          // Loop again seamlessly
-          this.startTime = performance.now();
-          this.rafId = requestAnimationFrame(step);
-        } else {
-          // Finish gracefully on frame 0
-          this.setFrame(0);
-          this.isPlaying = false;
-          this.maskEl.classList.remove('is-animating');
+        this.setFrame(this.options.startFrame % this.options.frameCount);
+        this.isPlaying = false;
+        this.el.setAttribute('data-animating', 'false');
+        this.maskEl.classList.remove('is-animating');
 
-          this.el.dispatchEvent(new CustomEvent('prism:end', {
-            bubbles: true,
-            detail: { icon: this }
-          }));
-        }
+        this.el.dispatchEvent(new CustomEvent('prism:end', {
+          bubbles: true,
+          detail: { icon: this }
+        }));
       }
     };
 
@@ -166,24 +288,28 @@ export class SpriteIcon {
     }
     this.isPlaying = false;
     this.isPendingStop = false;
+    this.el.setAttribute('data-animating', 'false');
     this.maskEl.classList.remove('is-animating');
-    this.setFrame(0);
+    this.setFrame(this.options.startFrame % this.options.frameCount);
   }
 
   handlePointerEnter = () => {
     this.isHovered = true;
     this.isPendingStop = false;
-    this.play();
+    if (this.options.trigger !== 'ambient') {
+      this.play();
+    }
   };
 
   handlePointerLeave = () => {
     this.isHovered = false;
-    // Do not abruptly snap; complete current cycle gracefully
     this.isPendingStop = true;
+    if (this.options.trigger !== 'ambient' && (this.options.loopOnHover || this.options.frameCount > 60)) {
+      this.reset();
+    }
   };
 
-  handlePointerDown = (e) => {
-    // Immediate playful reaction on tap/click without sticky touch hover
+  handlePointerDown = () => {
     this.play();
   };
 
@@ -197,16 +323,21 @@ export class SpriteIcon {
   bindEvents() {
     const trig = this.options.trigger;
 
-    if (trig === 'hover' || trig === 'both') {
-      this.el.addEventListener('pointerenter', this.handlePointerEnter);
-      this.el.addEventListener('pointerleave', this.handlePointerLeave);
+    if (trig === 'hover' || trig === 'both' || trig === 'ambient') {
+      this.parentCard =
+        this.el.closest('.editorial-card, .timeline-step-card, .pricing-card, .qualification-note-box, .demo-preview-box') ||
+        this.el;
+      this.parentCard.addEventListener('pointerenter', this.handlePointerEnter);
+      this.parentCard.addEventListener('pointerleave', this.handlePointerLeave);
     }
 
     if (trig === 'tap' || trig === 'both') {
       this.el.addEventListener('pointerdown', this.handlePointerDown);
     }
 
-    this.el.addEventListener('keydown', this.handleKeyDown);
+    if (trig !== 'none' && trig !== 'ambient') {
+      this.el.addEventListener('keydown', this.handleKeyDown);
+    }
   }
 
   unbindEvents() {
@@ -214,6 +345,14 @@ export class SpriteIcon {
     this.el.removeEventListener('pointerleave', this.handlePointerLeave);
     this.el.removeEventListener('pointerdown', this.handlePointerDown);
     this.el.removeEventListener('keydown', this.handleKeyDown);
+    if (this.parentCard) {
+      this.parentCard.removeEventListener('pointerenter', this.handlePointerEnter);
+      this.parentCard.removeEventListener('pointerleave', this.handlePointerLeave);
+    }
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
   }
 
   destroy() {
@@ -233,6 +372,8 @@ export class PrismSpriteIconElement extends HTMLElement {
       'rows',
       'columns',
       'duration',
+      'easing',
+      'start-frame',
       'loop-on-hover',
       'icon-color',
       'icon-size',
@@ -270,12 +411,17 @@ export class PrismSpriteIconElement extends HTMLElement {
       this.controller.destroy();
     }
 
+    const frameCount = Number(this.getAttribute('frame-count')) || 24;
+    const easingAttr = this.getAttribute('easing');
+
     this.controller = new SpriteIcon(this, {
       spriteSheetUrl: this.getAttribute('sprite-sheet-url') || '/assets/sprites/prism-sprite.webp',
-      frameCount: Number(this.getAttribute('frame-count')) || 24,
+      frameCount,
       columns: Number(this.getAttribute('columns')) || 6,
       rows: Number(this.getAttribute('rows')) || 4,
-      duration: Number(this.getAttribute('duration')) || 1100,
+      duration: Number(this.getAttribute('duration')) || (frameCount > 60 ? 5200 : 1100),
+      easing: easingAttr || (frameCount > 60 ? 'linear' : 'cubic'),
+      startFrame: Number(this.getAttribute('start-frame')) || 0,
       loopOnHover: this.hasAttribute('loop-on-hover') && this.getAttribute('loop-on-hover') !== 'false',
       iconColor: this.getAttribute('icon-color') || 'currentColor',
       iconSize: this.getAttribute('icon-size') || '120px',

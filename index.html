@@ -15,8 +15,10 @@
     <!-- Favicon: Clean faceted Prism Mark -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,4 4,26 28,26' fill='none' stroke='%23D9653B' stroke-width='3' stroke-linejoin='round'/%3E%3Cline x1='16' y1='4' x2='16' y2='17' stroke='%23D9653B' stroke-width='2'/%3E%3Cline x1='4' y1='26' x2='16' y2='17' stroke='%23D9653B' stroke-width='2'/%3E%3Cline x1='28' y1='26' x2='16' y2='17' stroke='%23D9653B' stroke-width='2'/%3E%3C/svg%3E" />
 
-    <!-- Preload Critical Animated Sprite Sheet -->
+    <!-- Preload Critical Animated Sprite Sheets -->
     <link rel="preload" href="/assets/sprites/prism-sprite.webp" as="image" type="image/webp" />
+    <link rel="preload" href="/assets/sprites/claude-rosette-sprite.png" as="image" type="image/png" />
+    <link rel="preload" href="/assets/sprites/claude-cluster-sprite.png" as="image" type="image/png" />
 
     <!-- Modular Vanilla Stylesheets -->
     <link rel="stylesheet" href="/css/tokens.css" />
@@ -131,9 +133,9 @@
               Get Started <span class="arrow" aria-hidden="true">&rarr;</span>
             </a>
             <a href="#demoModal" id="watchDemoBtn" class="btn-text-secondary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polygon points="10 8 16 12 10 16 10 8"></polygon>
+              <svg class="anim-play-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle class="play-ring" cx="12" cy="12" r="10" stroke-dasharray="5 2.5"></circle>
+                <polygon class="play-tri" points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
               </svg>
               Watch Demo
             </a>
@@ -183,11 +185,17 @@
             <article class="editorial-card">
               <div class="card-header-meta">
                 <div class="card-icon-box" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="4 7 4 4 20 4 20 7"></polyline>
-                    <line x1="9" y1="20" x2="15" y2="20"></line>
-                    <line x1="12" y1="4" x2="12" y2="20"></line>
-                  </svg>
+                  <prism-sprite-icon
+                    sprite-sheet-url="/assets/sprites/claude-rosette-sprite.png"
+                    columns="18"
+                    rows="17"
+                    frame-count="306"
+                    duration="5100"
+                    easing="linear"
+                    icon-size="30px"
+                    trigger="hover"
+                    loop-on-hover="true">
+                  </prism-sprite-icon>
                 </div>
                 <span class="label-counter">01</span>
               </div>
@@ -202,11 +210,17 @@
             <article class="editorial-card">
               <div class="card-header-meta">
                 <div class="card-icon-box" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                    <polyline points="2 17 12 22 22 17"></polyline>
-                    <polyline points="2 12 12 17 22 12"></polyline>
-                  </svg>
+                  <prism-sprite-icon
+                    sprite-sheet-url="/assets/sprites/claude-cluster-sprite.png"
+                    columns="18"
+                    rows="17"
+                    frame-count="306"
+                    duration="5400"
+                    easing="linear"
+                    icon-size="30px"
+                    trigger="hover"
+                    loop-on-hover="true">
+                  </prism-sprite-icon>
                 </div>
                 <span class="label-counter">02</span>
               </div>
@@ -221,10 +235,7 @@
             <article class="editorial-card">
               <div class="card-header-meta">
                 <div class="card-icon-box" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
+                  <prism-animated-icon name="compaction" size="28px"></prism-animated-icon>
                 </div>
                 <span class="label-counter">03</span>
               </div>
@@ -239,10 +250,7 @@
             <article class="editorial-card">
               <div class="card-header-meta">
                 <div class="card-icon-box" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                  </svg>
+                  <prism-animated-icon name="enclave" size="28px"></prism-animated-icon>
                 </div>
                 <span class="label-counter">04</span>
               </div>
@@ -256,11 +264,7 @@
 
           <!-- Honest Benchmark Callout -->
           <div class="qualification-note-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
+            <prism-animated-icon name="benchmark" size="28px" style="color: var(--accent-brand);" aria-hidden="true"></prism-animated-icon>
             <p class="qualification-note-text">
               <strong>Our engineering guarantee:</strong> Not sure if your problem needs fine-tuning? We benchmark prompt engineering and Retrieval-Augmented Generation (RAG) against your data first, and we will tell you upfront if you do not need fine-tuning.
             </p>
@@ -282,7 +286,12 @@
           <div class="timeline-container">
             <!-- Step 1 -->
             <div class="timeline-step-card">
-              <span class="step-number">PHASE 01</span>
+              <div class="timeline-step-head">
+                <span class="step-number">PHASE 01</span>
+                <span class="timeline-icon-badge" aria-hidden="true">
+                  <prism-animated-icon name="discovery" size="20px"></prism-animated-icon>
+                </span>
+              </div>
               <h3 class="step-title">Discovery</h3>
               <p class="step-desc">
                 We define target metrics, quantify baseline accuracy, and run a feasibility audit on your domain task.
@@ -291,7 +300,12 @@
 
             <!-- Step 2 -->
             <div class="timeline-step-card">
-              <span class="step-number">PHASE 02</span>
+              <div class="timeline-step-head">
+                <span class="step-number">PHASE 02</span>
+                <span class="timeline-icon-badge" aria-hidden="true">
+                  <prism-animated-icon name="dataprep" size="20px"></prism-animated-icon>
+                </span>
+              </div>
               <h3 class="step-title">Data Prep</h3>
               <p class="step-desc">
                 Token sanitization, deduplication, synthetic negative generation, and structured instruction curation.
@@ -300,7 +314,12 @@
 
             <!-- Step 3 -->
             <div class="timeline-step-card">
-              <span class="step-number">PHASE 03</span>
+              <div class="timeline-step-head">
+                <span class="step-number">PHASE 03</span>
+                <span class="timeline-icon-badge" aria-hidden="true">
+                  <prism-animated-icon name="eval" size="20px"></prism-animated-icon>
+                </span>
+              </div>
               <h3 class="step-title">Baseline Eval</h3>
               <p class="step-desc">
                 Blind benchmark against frontier zero-shot models and human annotators before fine-tuning begins.
@@ -309,7 +328,12 @@
 
             <!-- Step 4 -->
             <div class="timeline-step-card">
-              <span class="step-number">PHASE 04</span>
+              <div class="timeline-step-head">
+                <span class="step-number">PHASE 04</span>
+                <span class="timeline-icon-badge" aria-hidden="true">
+                  <prism-animated-icon name="training" size="20px"></prism-animated-icon>
+                </span>
+              </div>
               <h3 class="step-title">LoRA Training</h3>
               <p class="step-desc">
                 Parameter-efficient fine-tuning (PEFT/LoRA) and full-rank adapter convergence on dedicated H100 clusters.
@@ -318,7 +342,12 @@
 
             <!-- Step 5 -->
             <div class="timeline-step-card">
-              <span class="step-number">PHASE 05</span>
+              <div class="timeline-step-head">
+                <span class="step-number">PHASE 05</span>
+                <span class="timeline-icon-badge" aria-hidden="true">
+                  <prism-animated-icon name="deploy" size="20px"></prism-animated-icon>
+                </span>
+              </div>
               <h3 class="step-title">Eval &amp; Deploy</h3>
               <p class="step-desc">
                 Statistical regression report, edge case auditing, and model weights delivery into your infrastructure.
@@ -420,7 +449,12 @@ Please note that you should double check with your auditor before filing in GSTR
           <div class="delivery-grid">
             <!-- Option 1 -->
             <article class="editorial-card">
-              <span class="step-number">OPTION 01</span>
+              <div class="delivery-card-head">
+                <span class="step-number">OPTION 01</span>
+                <span class="timeline-icon-badge" aria-hidden="true">
+                  <prism-animated-icon name="hosted" size="20px"></prism-animated-icon>
+                </span>
+              </div>
               <h3 class="card-title">Hosted by Prism</h3>
               <p class="card-desc">
                 Fully managed inference infrastructure with autoscaling, 99.9% uptime SLA, and sub-100ms latency. Models run with dedicated adapter isolation in secured tenant environments.
@@ -434,7 +468,12 @@ Please note that you should double check with your auditor before filing in GSTR
 
             <!-- Option 2 -->
             <article class="editorial-card">
-              <span class="step-number">OPTION 02</span>
+              <div class="delivery-card-head">
+                <span class="step-number">OPTION 02</span>
+                <span class="timeline-icon-badge" aria-hidden="true">
+                  <prism-animated-icon name="vpc" size="20px"></prism-animated-icon>
+                </span>
+              </div>
               <h3 class="card-title">In Your Cloud / VPC</h3>
               <p class="card-desc">
                 We provide production-ready Terraform modules and Helm charts for AWS, GCP, or Azure. The model is deployed directly inside your private network boundary.
@@ -448,7 +487,12 @@ Please note that you should double check with your auditor before filing in GSTR
 
             <!-- Option 3 -->
             <article class="editorial-card">
-              <span class="step-number">OPTION 03</span>
+              <div class="delivery-card-head">
+                <span class="step-number">OPTION 03</span>
+                <span class="timeline-icon-badge" aria-hidden="true">
+                  <prism-animated-icon name="weights" size="20px"></prism-animated-icon>
+                </span>
+              </div>
               <h3 class="card-title">On-Prem or Weights Handover</h3>
               <p class="card-desc">
                 Receive unencumbered weights in Safetensors, GGUF, or AWQ quantized formats. Run on your own GPU nodes, air-gapped clusters, or edge appliances.
@@ -506,23 +550,23 @@ Please note that you should double check with your auditor before filing in GSTR
               </div>
               <ul class="pricing-features">
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>Feasibility audit &amp; baseline benchmark</span>
                 </li>
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>Data preparation, cleaning &amp; tokenization</span>
                 </li>
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>1 Custom fine-tuned model (8B or 14B class)</span>
                 </li>
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>Comprehensive regression &amp; accuracy report</span>
                 </li>
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>Delivery of weights (Safetensors / GGUF)</span>
                 </li>
               </ul>
@@ -544,23 +588,23 @@ Please note that you should double check with your auditor before filing in GSTR
               </div>
               <ul class="pricing-features">
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>Dedicated, autoscaling inference endpoint</span>
                 </li>
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>Continuous accuracy &amp; drift monitoring</span>
                 </li>
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>Quarterly or monthly model retraining</span>
                 </li>
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>99.9% Uptime SLA &amp; dedicated Slack support</span>
                 </li>
                 <li class="pricing-feature-item">
-                  <span class="pricing-check">&check;</span>
+                  <span class="pricing-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline></svg></span>
                   <span>Optional VPC / on-prem telemetry sync</span>
                 </li>
               </ul>
@@ -682,7 +726,7 @@ Please note that you should double check with your auditor before filing in GSTR
               <a href="#pricing" class="btn-pill-primary" style="background: #FFFFFF; color: #141413;">
                 Start 3-Week Pilot &rarr;
               </a>
-              <a href="#demoModal" class="btn-pill-primary" style="background: rgba(255,255,255,0.12); color: #FFFFFF; border-color: rgba(255,255,255,0.2);">
+              <a href="#demoModal" id="watchWalkthroughBtn" class="btn-pill-primary" style="background: rgba(255,255,255,0.12); color: #FFFFFF; border-color: rgba(255,255,255,0.2);">
                 Watch 3-Min Walkthrough
               </a>
             </div>
@@ -697,11 +741,11 @@ Please note that you should double check with your auditor before filing in GSTR
         <div class="footer-grid">
           <div class="footer-brand-col">
             <div style="display: flex; align-items: center; gap: 0.6rem;">
-              <!-- Static Prism Mark for Footer -->
+              <!-- Interactive Prism Mark for Footer -->
               <prism-sprite-icon
                 icon-size="32px"
-                trigger="none"
-                aria-label="Prism static logo mark">
+                trigger="both"
+                aria-label="Prism animated logo mark">
               </prism-sprite-icon>
               <span style="font-weight: 600; font-size: 1.15rem; color: var(--text-primary);">Prism</span>
             </div>
@@ -775,9 +819,21 @@ Please note that you should double check with your auditor before filing in GSTR
       <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">
         See how a proprietary 8B model fine-tuned on our pipeline processes complex tabular tax invoices and legal contracts in under 120ms with 100% JSON schema validation.
       </p>
-      <div style="aspect-ratio: 16/9; background: var(--bg-muted); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1.5rem; text-align: center; padding: 1rem;">
-        <prism-sprite-icon icon-size="64px" trigger="hover" aria-label="Demo icon"></prism-sprite-icon>
-        <p style="font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem;">
+      <div class="demo-preview-box" style="aspect-ratio: 16/9; background: var(--bg-muted); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1.5rem; text-align: center; padding: 1rem;">
+        <prism-sprite-icon
+          sprite-sheet-url="/assets/sprites/claude-cluster-sprite.png"
+          columns="18"
+          rows="17"
+          frame-count="306"
+          duration="5400"
+          easing="linear"
+          icon-size="64px"
+          trigger="hover"
+          loop-on-hover="true"
+          style="color: var(--accent-brand);"
+          aria-label="Animated pipeline cluster walkthrough mark">
+        </prism-sprite-icon>
+        <p style="font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.75rem;">
           3-Minute Technical Architecture Walkthrough
         </p>
       </div>

@@ -6,6 +6,7 @@
 
 import { initNavigation } from './nav.js';
 import './sprite-icon.js';
+import './animated-icons.js';
 import { calculateTokenEconomics } from './motion-math.js';
 import { AnthropicLightStage } from './anthropic-stage.js';
 
@@ -205,14 +206,19 @@ The customer is asking about a refund in Hindi/English (Hinglish). They seem fru
 
   // 5. Watch Demo Modal / Dialog
   const demoTrigger = document.getElementById('watchDemoBtn');
+  const demoSecondaryTrigger = document.getElementById('watchWalkthroughBtn');
   const demoModal = document.getElementById('demoModal');
   const demoCloseBtn = document.getElementById('demoCloseBtn');
 
-  if (demoTrigger && demoModal) {
-    demoTrigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      demoModal.showModal();
-    });
+  function openDemoModal(e) {
+    if (!demoModal) return;
+    e.preventDefault();
+    demoModal.showModal();
+  }
+
+  if (demoModal) {
+    demoTrigger?.addEventListener('click', openDemoModal);
+    demoSecondaryTrigger?.addEventListener('click', openDemoModal);
 
     demoCloseBtn?.addEventListener('click', () => {
       demoModal.close();
